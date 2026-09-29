@@ -1,24 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Batches • NDA Wallah</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Batches | NDA Wallah</title>
+<meta name="description" content="Study batches for NDA preparation by NDA Wallah.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0e1b33;--paper:#f2f4f7;--card:#fff;--muted:#556074;--line:#d9dee7;--army:#4a5d23;--navy:#1f3c73;--air:#3f8fc9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:3px solid var(--air);outline-offset:3px;border-radius:6px}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.brand{display:flex;align-items:center;gap:12px;padding:16px 20px;max-width:720px;margin:0 auto}
+.brand img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:#fff}
+.brand h1{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:1.6rem;line-height:1.1}
+.brand p{color:#c5cfe0;font-size:.9rem}
+.stripe{display:flex;height:6px}
+.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--army)}
+.stripe i:nth-child(2){background:var(--navy)}
+.stripe i:nth-child(3){background:var(--air)}
+
+main{padding:22px 20px 8px;max-width:720px;margin:0 auto}
+.back{display:inline-block;padding:6px 0;color:var(--navy);font-weight:600}
+h2{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:2rem;margin:6px 0 16px}
+
+/* Batch cards: styles whatever script.js puts inside #batchList */
+.list-grid{display:grid;gap:14px}
+.list-grid > *{background:var(--card);border:1px solid var(--line);border-left:8px solid var(--navy);border-radius:12px;padding:18px}
+.list-grid > *:nth-child(3n+1){border-left-color:var(--army)}
+.list-grid > *:nth-child(3n+3){border-left-color:var(--air)}
+.list-grid img{display:block;max-width:100%;height:auto;border-radius:8px;margin-bottom:12px}
+.list-grid h3,.list-grid h4,.list-grid b{font-size:1.2rem;font-weight:600;line-height:1.3}
+.list-grid p{color:var(--muted);margin-top:6px}
+.list-grid a,.list-grid button{display:inline-block;margin-top:14px;padding:11px 20px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:600 1rem "Barlow",system-ui,sans-serif;cursor:pointer}
+
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
+
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+nav .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;font-size:.85rem;font-weight:500;color:var(--muted)}
+nav a span{font-size:1.3rem;line-height:1}
+nav a[aria-current="page"]{color:var(--navy);font-weight:600;box-shadow:inset 0 3px 0 var(--navy)}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="assets/nda-wallah-logo.png" alt="NDA Wallah logo">
-      <div><h1>Batches</h1><p>NDA Wallah</p></div>
-    </div>
-  </header>
-  <main class="container page">
-    <a class="back" href="index.html">← Home</a>
-    <h2>Study Batches</h2>
-    <div id="batchList" class="list-grid"></div>
-    <p id="batchEmpty" class="empty">Batches will be added here.</p>
-  </main>
-  <script src="script.js"></script>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="assets/nda-wallah-logo.png" alt="NDA Wallah logo" onerror="this.style.display='none'">
+    <div><h1>Batches</h1><p>NDA Wallah</p></div>
+  </div>
+  <div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
+</header>
+
+<main>
+  <a class="back" href="index.html">← Home</a>
+  <h2>Study batches</h2>
+  <div id="batchList" class="list-grid"></div>
+  <p id="batchEmpty" class="empty">No batches yet. New batches will appear here.</p>
+</main>
+
+<nav aria-label="Main">
+  <div class="in">
+    <a href="batches.html" aria-current="page"><span aria-hidden="true">🎖️</span>Batches</a>
+    <a href="index.html"><span aria-hidden="true">🏠</span>Home</a>
+    <a href="books.html"><span aria-hidden="true">📚</span>Books</a>
+  </div>
+</nav>
+
+<script src="script.js"></script>
 </body>
 </html>
