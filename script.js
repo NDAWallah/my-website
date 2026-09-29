@@ -1,16 +1,42 @@
 // NDA Wallah Website - Basic Functions
 
-// ====== YAHAN APNE BATCHES AUR BOOKS ADD KARO ======
-// Har item ke beech comma lagana. Neeche ka example copy karke apna likho.
-// link aur linkText optional hain (na do to button nahi dikhega).
-const BATCHES = [
-  // { title: "NDA 2027 Batch", description: "Maths + GAT ki live classes", link: "https://t.me/yourchannel", linkText: "Join batch" },
-];
+// Fallback lists: sirf tab dikhengi jab Firebase set up nahi hai.
+const BATCHES = [];
+const BOOKS = [];
+const SOCIAL = [];
 
-const BOOKS = [
-  // { title: "NDA Maths Notes", description: "Free PDF notes", link: "https://example.com/notes.pdf", linkText: "Open PDF" },
-];
-// ===================================================
+const SDK = "https://www.gstatic.com/firebasejs/10.12.2/";
+
+function loadScript(src) {
+  return new Promise(function (resolve, reject) {
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+function firebaseReady() {
+  const c = window.FIREBASE_CONFIG;
+  return !!(c && c.apiKey && !/^PASTE/.test(c.apiKey));
+}
+
+// Reads one collection (batches / books / social) from Firestore, newest first.
+async function fetchItems(col, fallback) {
+  try {
+    await loadScript("firebase-config.js");
+    if (!firebaseReady()) return fallback;
+    await loadScript(SDK + "firebase-app-compat.js");
+    await loadScript(SDK + "firebase-firestore-compat.js");
+    if (!firebase.apps.length) firebase.initializeApp(window.FIREBASE_CONFIG);
+    const snap = await firebase.firestore().collection(col).orderBy("created", "desc").get();
+    return snap.docs.map(function (d) { return d.data(); });
+  } catch (err) {
+    console.error("Could not load " + col, err);
+    return fallback;
+  }
+}
 
 function renderCards(items, listId, emptyId) {
   const list = document.getElementById(listId);
@@ -20,9 +46,18 @@ function renderCards(items, listId, emptyId) {
   list.innerHTML = "";
   items.forEach(function (item) {
     const card = document.createElement("div");
+    const name = item.title || item.name || "";
+
+    if (item.image) {
+      const img = document.createElement("img");
+      img.src = item.image;
+      img.alt = name;
+      img.loading = "lazy";
+      card.appendChild(img);
+    }
 
     const title = document.createElement("h3");
-    title.textContent = item.title || "";
+    title.textContent = name;
     card.appendChild(title);
 
     if (item.description) {
@@ -31,7 +66,7 @@ function renderCards(items, listId, emptyId) {
       card.appendChild(desc);
     }
 
-    if (item.link) {
+    if (item.link && /^https?:\/\//i.test(item.link)) {
       const btn = document.createElement("a");
       btn.href = item.link;
       btn.textContent = item.linkText || "Open";
@@ -48,14 +83,25 @@ function renderCards(items, listId, emptyId) {
   }
 }
 
+function loadList(col, listId, emptyId, fallback) {
+  const list = document.getElementById(listId);
+  if (!list) return;
+  const empty = document.getElementById(emptyId);
+  if (empty) empty.style.display = "none"; // avoid a flash of "No items yet" while loading
+  fetchItems(col, fallback).then(function (items) {
+    renderCards(items, listId, emptyId);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
   // Page loading effect
   document.body.classList.add("loaded");
 
-  // Batches and books pages
-  renderCards(BATCHES, "batchList", "batchEmpty");
-  renderCards(BOOKS, "bookList", "bookEmpty");
+  // Batches, books and social pages
+  loadList("batches", "batchList", "batchEmpty", BATCHES);
+  loadList("books", "bookList", "bookEmpty", BOOKS);
+  loadList("social", "socialList", "socialEmpty", SOCIAL);
 
   // Smooth link handling
   const links = document.querySelectorAll("a");
@@ -68,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Admin button protection for prototype
+  // Admin button
   const adminButtons = document.querySelectorAll(".admin-btn");
   adminButtons.forEach(function (button) {
     button.addEventListener("click", function () {
