@@ -3,61 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex">
 <title>Admin | NDA Wallah</title>
-<meta name="description" content="Admin panel for NDA Wallah.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-:root{--ink:#0e1b33;--paper:#f2f4f7;--card:#fff;--muted:#556074;--line:#d9dee7;--army:#4a5d23;--navy:#1f3c73;--air:#3f8fc9}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
-a{color:inherit;text-decoration:none}
-a:focus-visible,button:focus-visible{outline:3px solid var(--air);outline-offset:3px;border-radius:6px}
-.wrap{max-width:720px;margin:0 auto;padding:0 20px}
-
-.topbar{background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
-.brand{display:flex;align-items:center;gap:12px;padding:16px 20px;max-width:720px;margin:0 auto}
-.brand img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:#fff}
-.brand h1{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:1.6rem;line-height:1.1}
-.brand p{color:#c5cfe0;font-size:.9rem}
-.stripe{display:flex;height:6px}
-.stripe i{flex:1}
-.stripe i:nth-child(1){background:var(--army)}
-.stripe i:nth-child(2){background:var(--navy)}
-.stripe i:nth-child(3){background:var(--air)}
-
-main{padding:22px 20px 8px;max-width:720px;margin:0 auto}
-.back{display:inline-block;padding:6px 0;color:var(--navy);font-weight:600}
-h2{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:2rem;margin:6px 0 16px}
-
-/* Batch cards: styles whatever script.js puts inside #batchList */
-.list-grid{display:grid;gap:14px}
-.list-grid > *{background:var(--card);border:1px solid var(--line);border-left:8px solid var(--navy);border-radius:12px;padding:18px}
-.list-grid > *:nth-child(3n+1){border-left-color:var(--army)}
-.list-grid > *:nth-child(3n+3){border-left-color:var(--air)}
-.list-grid img{display:block;max-width:100%;height:auto;border-radius:8px;margin-bottom:12px}
-.list-grid h3,.list-grid h4,.list-grid b{font-size:1.2rem;font-weight:600;line-height:1.3}
-.list-grid p{color:var(--muted);margin-top:6px}
-.list-grid a,.list-grid button{display:inline-block;margin-top:14px;padding:11px 20px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:600 1rem "Barlow",system-ui,sans-serif;cursor:pointer}
-
-.empty{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
-
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
-nav .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;font-size:.85rem;font-weight:500;color:var(--muted)}
-nav a span{font-size:1.3rem;line-height:1}
-nav a[aria-current="page"]{color:var(--navy);font-weight:600;box-shadow:inset 0 3px 0 var(--navy)}
-.notice{background:#fff7e0;border:1px solid #ecd9a0;border-radius:12px;padding:14px 16px;margin:8px 0 22px;font-size:.95rem}
-.admin-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
-.admin-section h2{font-size:1.4rem;margin:0 0 12px}
-.form{display:grid;gap:10px}
-input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:1rem "Barlow",system-ui,sans-serif;background:#fff;color:var(--ink)}
-button{padding:12px 18px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:600 1rem "Barlow",system-ui,sans-serif;cursor:pointer}
-.out{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}
-.out code{display:block;background:#0e1b33;color:#dbe6ff;padding:12px;border-radius:10px;font-size:.85rem;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
-.out button{margin-top:10px;background:var(--army)}
-.out p{margin-top:8px;color:var(--muted);font-size:.9rem}
+.msg{margin-top:10px;font-size:.95rem;color:var(--muted)}
+.msg.ok{color:var(--army)}
+.msg.bad{color:#b3261e}
+.lbl{display:grid;gap:6px;color:var(--muted);font-size:.95rem}
+.items{list-style:none;margin-top:14px;border-top:1px solid var(--line)}
+.items li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.items li button{padding:8px 14px;border:0;border-radius:8px;background:#b3261e;color:#fff;font:600 .9rem "Barlow",system-ui,sans-serif;cursor:pointer}
+.items .none{color:var(--muted)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 16px;color:var(--muted)}
+.bar button{padding:8px 14px;border:0;border-radius:8px;background:var(--navy);color:#fff;font:600 .9rem "Barlow",system-ui,sans-serif;cursor:pointer}
 </style>
 </head>
 <body>
@@ -73,73 +35,177 @@ button{padding:12px 18px;border:0;border-radius:10px;background:var(--navy);colo
 <main>
   <a class="back" href="index.html">← Public Home</a>
 
-  <div class="notice">
-    <strong>Kaise kaam karta hai:</strong> form bharo, neeche ek ready line banegi. Use Copy karke <code>script.js</code> ki list mein paste karo aur Commit karo. Tabhi sabko dikhega.
+  <section id="login" class="admin-section">
+    <h2>Admin login</h2>
+    <form id="loginForm" class="form">
+      <input id="email" type="email" required placeholder="Email" autocomplete="username">
+      <input id="password" type="password" required placeholder="Password" autocomplete="current-password">
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginMsg" class="msg"></p>
+  </section>
+
+  <div id="panel" hidden>
+    <div class="bar"><span id="who"></span><button id="logout" type="button">Logout</button></div>
+    <div id="sections"></div>
   </div>
-
-  <section class="admin-section">
-    <h2>Add batch</h2>
-    <form id="batchForm" class="form">
-      <input id="batchName" required placeholder="Batch name">
-      <input id="batchInfo" placeholder="Short description">
-      <input id="batchLink" type="url" placeholder="Batch link (optional)">
-      <button type="submit">Make batch line</button>
-    </form>
-    <div class="out" id="batchOut" hidden><code></code><button type="button" class="copy">Copy</button><p>Ise <b>BATCHES</b> ki list mein paste karo.</p></div>
-  </section>
-
-  <section class="admin-section">
-    <h2>Add book</h2>
-    <form id="bookForm" class="form">
-      <input id="bookName" required placeholder="Book / material name">
-      <input id="bookInfo" placeholder="Short description">
-      <input id="bookLink" type="url" placeholder="PDF / resource link">
-      <button type="submit">Make book line</button>
-    </form>
-    <div class="out" id="bookOut" hidden><code></code><button type="button" class="copy">Copy</button><p>Ise <b>BOOKS</b> ki list mein paste karo.</p></div>
-  </section>
-
-  <section class="admin-section">
-    <h2>Add social link</h2>
-    <form id="socialForm" class="form">
-      <input id="socialName" required placeholder="Telegram / WhatsApp / Instagram">
-      <input id="socialLink" required type="url" placeholder="https://...">
-      <button type="submit">Make social line</button>
-    </form>
-    <div class="out" id="socialOut" hidden><code></code><button type="button" class="copy">Copy</button><p>Social page abhi is list se jodna baaki hai.</p></div>
-  </section>
 </main>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script>
-function line(o){
-  return "{ " + Object.keys(o).filter(function(k){return o[k];}).map(function(k){return k + ": " + JSON.stringify(o[k]);}).join(", ") + " },";
-}
-function val(id){ return document.getElementById(id).value.trim(); }
-function wire(formId, outId, build){
-  var f = document.getElementById(formId), out = document.getElementById(outId);
-  f.addEventListener("submit", function(e){
-    e.preventDefault();
-    out.querySelector("code").textContent = line(build());
-    out.querySelector(".copy").textContent = "Copy";
-    out.hidden = false;
-    f.reset();
-  });
-}
-wire("batchForm","batchOut",function(){ return {title:val("batchName"), description:val("batchInfo"), link:val("batchLink"), linkText: val("batchLink") ? "Join batch" : ""}; });
-wire("bookForm","bookOut",function(){ return {title:val("bookName"), description:val("bookInfo"), link:val("bookLink"), linkText: val("bookLink") ? "Open" : ""}; });
-wire("socialForm","socialOut",function(){ return {name:val("socialName"), link:val("socialLink")}; });
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var cfg = window.FIREBASE_CONFIG;
+  if (!cfg || !cfg.apiKey || /^PASTE/.test(cfg.apiKey)) {
+    $("loginForm").hidden = true;
+    $("loginMsg").textContent = "Pehle firebase-config.js mein apni Firebase details paste karo.";
+    return;
+  }
+  firebase.initializeApp(cfg);
+  var auth = firebase.auth();
+  var db = firebase.firestore();
 
-document.addEventListener("click", function(e){
-  if(!e.target.classList.contains("copy")) return;
-  var btn = e.target, code = btn.parentNode.querySelector("code");
-  function done(){ btn.textContent = "Copied"; }
-  if(navigator.clipboard){ navigator.clipboard.writeText(code.textContent).then(done, function(){ selectIt(code); }); }
-  else { selectIt(code); }
-});
-function selectIt(el){
-  var r = document.createRange(); r.selectNodeContents(el);
-  var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-}
+  var SECTIONS = [
+    { col: "batches", title: "Batches", nameLabel: "Batch name", linkLabel: "Batch link (Telegram etc.)", defText: "Join batch", image: true },
+    { col: "books", title: "Books and study material", nameLabel: "Book / material name", linkLabel: "PDF / resource link", defText: "Open", image: true },
+    { col: "social", title: "Social links", nameLabel: "Telegram / WhatsApp / Instagram", linkLabel: "https://...", defText: "Join", image: false, linkRequired: true }
+  ];
+
+  function explain(err) {
+    if (err && err.code === "permission-denied") return "Ye account allowed nahi hai. Firestore rules mein apna email check karo.";
+    return "Nahi hua: " + ((err && err.message) || err);
+  }
+
+  // Shrinks a phone photo so it stays small (about 50-120 KB) before saving.
+  function shrink(file) {
+    return new Promise(function (resolve, reject) {
+      var fr = new FileReader();
+      fr.onerror = reject;
+      fr.onload = function () {
+        var im = new Image();
+        im.onerror = reject;
+        im.onload = function () {
+          var k = Math.min(1, 700 / Math.max(im.width, im.height));
+          var c = document.createElement("canvas");
+          c.width = Math.round(im.width * k);
+          c.height = Math.round(im.height * k);
+          var g = c.getContext("2d");
+          g.fillStyle = "#fff";
+          g.fillRect(0, 0, c.width, c.height);
+          g.drawImage(im, 0, 0, c.width, c.height);
+          resolve(c.toDataURL("image/jpeg", 0.72));
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+
+  async function refresh(s) {
+    var ul = $("l-" + s.col);
+    try {
+      var snap = await db.collection(s.col).orderBy("created", "desc").get();
+      ul.innerHTML = "";
+      if (snap.empty) { ul.innerHTML = '<li class="none">Abhi kuch add nahi hai.</li>'; return; }
+      snap.forEach(function (doc) {
+        var d = doc.data();
+        var li = document.createElement("li");
+        var t = document.createElement("span");
+        t.textContent = d.title || "(no name)";
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = "Delete";
+        b.onclick = async function () {
+          if (!confirm("Delete: " + (d.title || "") + " ?")) return;
+          try { await db.collection(s.col).doc(doc.id).delete(); } catch (e) { alert(explain(e)); }
+          refresh(s);
+        };
+        li.appendChild(t);
+        li.appendChild(b);
+        ul.appendChild(li);
+      });
+    } catch (e) {
+      ul.innerHTML = '<li class="none">List load nahi hui. Login aur rules check karo.</li>';
+    }
+  }
+
+  function wire(s) {
+    var f = $("f-" + s.col), msg = $("m-" + s.col);
+    f.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var btn = f.querySelector("button");
+      btn.disabled = true;
+      msg.className = "msg";
+      msg.textContent = "Saving...";
+      try {
+        var v = function (n) { return f.elements[n] ? f.elements[n].value.trim() : ""; };
+        var data = { title: v("title"), description: v("description"), link: v("link"), linkText: v("linkText") || s.defText };
+        var image = v("imageUrl");
+        var file = f.elements.file && f.elements.file.files[0];
+        if (file) image = await shrink(file);
+        if (image) data.image = image;
+        data.created = firebase.firestore.FieldValue.serverTimestamp();
+        await db.collection(s.col).add(data);
+        f.reset();
+        msg.className = "msg ok";
+        msg.textContent = "Add ho gaya. Site par dikhne lagega.";
+        refresh(s);
+      } catch (err) {
+        msg.className = "msg bad";
+        msg.textContent = explain(err);
+      }
+      btn.disabled = false;
+    });
+  }
+
+  SECTIONS.forEach(function (s) {
+    var sec = document.createElement("section");
+    sec.className = "admin-section";
+    sec.innerHTML =
+      "<h2>" + s.title + "</h2>" +
+      '<form class="form" id="f-' + s.col + '">' +
+        '<input name="title" required placeholder="' + s.nameLabel + '">' +
+        '<input name="description" placeholder="Short description (optional)">' +
+        '<input name="link" type="url"' + (s.linkRequired ? " required" : "") + ' placeholder="' + s.linkLabel + '">' +
+        '<input name="linkText" placeholder="Button text (default: ' + s.defText + ')">' +
+        (s.image
+          ? '<label class="lbl">Photo from your phone (optional)<input name="file" type="file" accept="image/*"></label>' +
+            '<input name="imageUrl" type="url" placeholder="Or a photo link (optional)">'
+          : "") +
+        '<button type="submit">Add</button>' +
+      "</form>" +
+      '<p class="msg" id="m-' + s.col + '"></p>' +
+      '<ul class="items" id="l-' + s.col + '"></ul>';
+    $("sections").appendChild(sec);
+    wire(s);
+  });
+
+  $("loginForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    $("loginMsg").className = "msg";
+    $("loginMsg").textContent = "Logging in...";
+    try {
+      await auth.signInWithEmailAndPassword($("email").value.trim(), $("password").value);
+      $("loginMsg").textContent = "";
+    } catch (err) {
+      $("loginMsg").className = "msg bad";
+      $("loginMsg").textContent = "Login nahi hua. Email ya password check karo.";
+    }
+  });
+  $("logout").addEventListener("click", function () { auth.signOut(); });
+
+  auth.onAuthStateChanged(function (u) {
+    $("login").hidden = !!u;
+    $("panel").hidden = !u;
+    if (u) {
+      $("who").textContent = u.email;
+      SECTIONS.forEach(refresh);
+    }
+  });
+})();
 </script>
 </body>
 </html>
