@@ -1,59 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin • NDA Wallah</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Admin | NDA Wallah</title>
+<meta name="description" content="Admin panel for NDA Wallah.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0e1b33;--paper:#f2f4f7;--card:#fff;--muted:#556074;--line:#d9dee7;--army:#4a5d23;--navy:#1f3c73;--air:#3f8fc9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:3px solid var(--air);outline-offset:3px;border-radius:6px}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+
+.topbar{background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.brand{display:flex;align-items:center;gap:12px;padding:16px 20px;max-width:720px;margin:0 auto}
+.brand img{width:44px;height:44px;border-radius:10px;object-fit:cover;background:#fff}
+.brand h1{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:1.6rem;line-height:1.1}
+.brand p{color:#c5cfe0;font-size:.9rem}
+.stripe{display:flex;height:6px}
+.stripe i{flex:1}
+.stripe i:nth-child(1){background:var(--army)}
+.stripe i:nth-child(2){background:var(--navy)}
+.stripe i:nth-child(3){background:var(--air)}
+
+main{padding:22px 20px 8px;max-width:720px;margin:0 auto}
+.back{display:inline-block;padding:6px 0;color:var(--navy);font-weight:600}
+h2{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size:2rem;margin:6px 0 16px}
+
+/* Batch cards: styles whatever script.js puts inside #batchList */
+.list-grid{display:grid;gap:14px}
+.list-grid > *{background:var(--card);border:1px solid var(--line);border-left:8px solid var(--navy);border-radius:12px;padding:18px}
+.list-grid > *:nth-child(3n+1){border-left-color:var(--army)}
+.list-grid > *:nth-child(3n+3){border-left-color:var(--air)}
+.list-grid img{display:block;max-width:100%;height:auto;border-radius:8px;margin-bottom:12px}
+.list-grid h3,.list-grid h4,.list-grid b{font-size:1.2rem;font-weight:600;line-height:1.3}
+.list-grid p{color:var(--muted);margin-top:6px}
+.list-grid a,.list-grid button{display:inline-block;margin-top:14px;padding:11px 20px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:600 1rem "Barlow",system-ui,sans-serif;cursor:pointer}
+
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
+
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
+nav .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;font-size:.85rem;font-weight:500;color:var(--muted)}
+nav a span{font-size:1.3rem;line-height:1}
+nav a[aria-current="page"]{color:var(--navy);font-weight:600;box-shadow:inset 0 3px 0 var(--navy)}
+.notice{background:#fff7e0;border:1px solid #ecd9a0;border-radius:12px;padding:14px 16px;margin:8px 0 22px;font-size:.95rem}
+.admin-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.admin-section h2{font-size:1.4rem;margin:0 0 12px}
+.form{display:grid;gap:10px}
+input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:1rem "Barlow",system-ui,sans-serif;background:#fff;color:var(--ink)}
+button{padding:12px 18px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:600 1rem "Barlow",system-ui,sans-serif;cursor:pointer}
+.out{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}
+.out code{display:block;background:#0e1b33;color:#dbe6ff;padding:12px;border-radius:10px;font-size:.85rem;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.out button{margin-top:10px;background:var(--army)}
+.out p{margin-top:8px;color:var(--muted);font-size:.9rem}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <img src="logo.png" alt="NDA Wallah logo">
-      <div><h1>Admin Panel</h1><p>NDA Wallah</p></div>
-    </div>
-  </header>
 
-  <main class="container page">
-    <a class="back" href="index.html">← Public Home</a>
+<header class="topbar">
+  <div class="brand">
+    <img src="logo.png" alt="NDA Wallah logo" onerror="this.style.display='none'">
+    <div><h1>Admin Panel</h1><p>NDA Wallah</p></div>
+  </div>
+  <div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
+</header>
 
-    <div class="notice">
-      <strong>Prototype admin panel:</strong>
-      this first version stores data only in this browser. It is NOT secure and does not yet give you a real private admin account.
-      We will add proper authentication and a shared database in the next phase.
-    </div>
+<main>
+  <a class="back" href="index.html">← Public Home</a>
 
-    <section class="admin-section">
-      <h2>Add Batch</h2>
-      <form id="batchForm" class="form">
-        <input id="batchName" required placeholder="Batch name">
-        <input id="batchInfo" placeholder="Short description">
-        <input id="batchLink" type="url" placeholder="Batch link (optional)">
-        <button type="submit">+ Add Batch</button>
-      </form>
-    </section>
+  <div class="notice">
+    <strong>Kaise kaam karta hai:</strong> form bharo, neeche ek ready line banegi. Use Copy karke <code>script.js</code> ki list mein paste karo aur Commit karo. Tabhi sabko dikhega.
+  </div>
 
-    <section class="admin-section">
-      <h2>Add Book</h2>
-      <form id="bookForm" class="form">
-        <input id="bookName" required placeholder="Book / material name">
-        <input id="bookInfo" placeholder="Short description">
-        <input id="bookLink" type="url" placeholder="PDF / resource link">
-        <button type="submit">+ Add Book</button>
-      </form>
-    </section>
+  <section class="admin-section">
+    <h2>Add batch</h2>
+    <form id="batchForm" class="form">
+      <input id="batchName" required placeholder="Batch name">
+      <input id="batchInfo" placeholder="Short description">
+      <input id="batchLink" type="url" placeholder="Batch link (optional)">
+      <button type="submit">Make batch line</button>
+    </form>
+    <div class="out" id="batchOut" hidden><code></code><button type="button" class="copy">Copy</button><p>Ise <b>BATCHES</b> ki list mein paste karo.</p></div>
+  </section>
 
-    <section class="admin-section">
-      <h2>Add Social Link</h2>
-      <form id="socialForm" class="form">
-        <input id="socialName" required placeholder="Telegram / WhatsApp / Instagram">
-        <input id="socialLink" required type="url" placeholder="https://...">
-        <button type="submit">+ Add Social Link</button>
-      </form>
-    </section>
+  <section class="admin-section">
+    <h2>Add book</h2>
+    <form id="bookForm" class="form">
+      <input id="bookName" required placeholder="Book / material name">
+      <input id="bookInfo" placeholder="Short description">
+      <input id="bookLink" type="url" placeholder="PDF / resource link">
+      <button type="submit">Make book line</button>
+    </form>
+    <div class="out" id="bookOut" hidden><code></code><button type="button" class="copy">Copy</button><p>Ise <b>BOOKS</b> ki list mein paste karo.</p></div>
+  </section>
 
-    <button class="danger" id="clearData">Clear prototype data</button>
-  </main>
-  <script src="script.js"></script>
+  <section class="admin-section">
+    <h2>Add social link</h2>
+    <form id="socialForm" class="form">
+      <input id="socialName" required placeholder="Telegram / WhatsApp / Instagram">
+      <input id="socialLink" required type="url" placeholder="https://...">
+      <button type="submit">Make social line</button>
+    </form>
+    <div class="out" id="socialOut" hidden><code></code><button type="button" class="copy">Copy</button><p>Social page abhi is list se jodna baaki hai.</p></div>
+  </section>
+</main>
+
+<script>
+function line(o){
+  return "{ " + Object.keys(o).filter(function(k){return o[k];}).map(function(k){return k + ": " + JSON.stringify(o[k]);}).join(", ") + " },";
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+function wire(formId, outId, build){
+  var f = document.getElementById(formId), out = document.getElementById(outId);
+  f.addEventListener("submit", function(e){
+    e.preventDefault();
+    out.querySelector("code").textContent = line(build());
+    out.querySelector(".copy").textContent = "Copy";
+    out.hidden = false;
+    f.reset();
+  });
+}
+wire("batchForm","batchOut",function(){ return {title:val("batchName"), description:val("batchInfo"), link:val("batchLink"), linkText: val("batchLink") ? "Join batch" : ""}; });
+wire("bookForm","bookOut",function(){ return {title:val("bookName"), description:val("bookInfo"), link:val("bookLink"), linkText: val("bookLink") ? "Open" : ""}; });
+wire("socialForm","socialOut",function(){ return {name:val("socialName"), link:val("socialLink")}; });
+
+document.addEventListener("click", function(e){
+  if(!e.target.classList.contains("copy")) return;
+  var btn = e.target, code = btn.parentNode.querySelector("code");
+  function done(){ btn.textContent = "Copied"; }
+  if(navigator.clipboard){ navigator.clipboard.writeText(code.textContent).then(done, function(){ selectIt(code); }); }
+  else { selectIt(code); }
+});
+function selectIt(el){
+  var r = document.createRange(); r.selectNodeContents(el);
+  var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+}
+</script>
 </body>
 </html>
