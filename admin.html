@@ -18,6 +18,9 @@
 .items li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .items li button{padding:8px 14px;border:0;border-radius:8px;background:#b3261e;color:#fff;font:600 .9rem "Barlow",system-ui,sans-serif;cursor:pointer}
 .items .none{color:var(--muted)}
+.items li div{display:flex;gap:8px;flex-shrink:0}
+.items li button.edit{background:#1f3c73}
+.form .cancel{background:#6b7588}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0 16px;color:var(--muted)}
 .bar button{padding:8px 14px;border:0;border-radius:8px;background:var(--navy);color:#fff;font:600 .9rem "Barlow",system-ui,sans-serif;cursor:pointer}
 </style>
@@ -104,39 +107,86 @@
     });
   }
 
+  var editing = {};  // section -> id of the item being edited
+  var cache = {};    // section -> { id: data }
+
+  function clearEdit(s) {
+    var f = $("f-" + s.col);
+    delete editing[s.col];
+    f.reset();
+    f.querySelector('button[type="submit"]').textContent = "Add";
+    f.querySelector(".cancel").hidden = true;
+  }
+
+  function startEdit(s, id) {
+    var f = $("f-" + s.col), msg = $("m-" + s.col), d = cache[s.col][id];
+    editing[s.col] = id;
+    ["title", "description", "link", "linkText"].forEach(function (n) {
+      if (f.elements[n]) f.elements[n].value = d[n] || "";
+    });
+    if (f.elements.imageUrl) f.elements.imageUrl.value = "";
+    if (f.elements.file) f.elements.file.value = "";
+    f.querySelector('button[type="submit"]').textContent = "Update";
+    f.querySelector(".cancel").hidden = false;
+    msg.className = "msg";
+    msg.textContent = "Edit mode: badlav karke Update dabao." + (d.image ? " Nayi photo nahi chunoge to purani photo hi rahegi." : "");
+    f.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   async function refresh(s) {
     var ul = $("l-" + s.col);
     try {
       var snap = await db.collection(s.col).orderBy("created", "desc").get();
       ul.innerHTML = "";
+      cache[s.col] = {};
       if (snap.empty) { ul.innerHTML = '<li class="none">Abhi kuch add nahi hai.</li>'; return; }
       snap.forEach(function (doc) {
         var d = doc.data();
+        cache[s.col][doc.id] = d;
         var li = document.createElement("li");
         var t = document.createElement("span");
         t.textContent = d.title || "(no name)";
+        var box = document.createElement("div");
+
+        var e = document.createElement("button");
+        e.type = "button";
+        e.className = "edit";
+        e.textContent = "Edit";
+        e.onclick = function () { startEdit(s, doc.id); };
+
         var b = document.createElement("button");
         b.type = "button";
         b.textContent = "Delete";
         b.onclick = async function () {
           if (!confirm("Delete: " + (d.title || "") + " ?")) return;
-          try { await db.collection(s.col).doc(doc.id).delete(); } catch (e) { alert(explain(e)); }
+          try {
+            await db.collection(s.col).doc(doc.id).delete();
+            if (editing[s.col] === doc.id) clearEdit(s);
+          } catch (err) { alert(explain(err)); }
           refresh(s);
         };
+
+        box.appendChild(e);
+        box.appendChild(b);
         li.appendChild(t);
-        li.appendChild(b);
+        li.appendChild(box);
         ul.appendChild(li);
       });
-    } catch (e) {
+    } catch (err) {
       ul.innerHTML = '<li class="none">List load nahi hui. Login aur rules check karo.</li>';
     }
   }
 
   function wire(s) {
     var f = $("f-" + s.col), msg = $("m-" + s.col);
+    f.querySelector(".cancel").addEventListener("click", function () {
+      clearEdit(s);
+      msg.className = "msg";
+      msg.textContent = "";
+    });
     f.addEventListener("submit", async function (e) {
       e.preventDefault();
-      var btn = f.querySelector("button");
+      var btn = f.querySelector('button[type="submit"]');
       btn.disabled = true;
       msg.className = "msg";
       msg.textContent = "Saving...";
@@ -147,11 +197,19 @@
         var file = f.elements.file && f.elements.file.files[0];
         if (file) image = await shrink(file);
         if (image) data.image = image;
-        data.created = firebase.firestore.FieldValue.serverTimestamp();
-        await db.collection(s.col).add(data);
-        f.reset();
-        msg.className = "msg ok";
-        msg.textContent = "Add ho gaya. Site par dikhne lagega.";
+        var id = editing[s.col];
+        if (id) {
+          await db.collection(s.col).doc(id).update(data);
+          clearEdit(s);
+          msg.className = "msg ok";
+          msg.textContent = "Update ho gaya.";
+        } else {
+          data.created = firebase.firestore.FieldValue.serverTimestamp();
+          await db.collection(s.col).add(data);
+          f.reset();
+          msg.className = "msg ok";
+          msg.textContent = "Add ho gaya. Site par dikhne lagega.";
+        }
         refresh(s);
       } catch (err) {
         msg.className = "msg bad";
@@ -176,6 +234,7 @@
             '<input name="imageUrl" type="url" placeholder="Or a photo link (optional)">'
           : "") +
         '<button type="submit">Add</button>' +
+        '<button type="button" class="cancel" hidden>Cancel edit</button>' +
       "</form>" +
       '<p class="msg" id="m-' + s.col + '"></p>' +
       '<ul class="items" id="l-' + s.col + '"></ul>';
