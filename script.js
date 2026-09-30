@@ -93,7 +93,89 @@ function loadList(col, listId, emptyId, fallback) {
   });
 }
 
+
+// 3-line menu button + side drawer. Add or remove menu items in the list below.
+function buildMenu() {
+  const header = document.querySelector(".top, .topbar");
+  if (!header) return;
+
+  const items = [
+    ["🏠", "Home", "index.html"],
+    ["🎖️", "Batches", "batches.html"],
+    ["📚", "Books", "books.html"],
+    ["💬", "Connect with us", "social.html"]
+  ];
+  const page = location.pathname.split("/").pop() || "index.html";
+  const logo = header.querySelector(".brand img");
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "menu-btn";
+  btn.setAttribute("aria-label", "Open menu");
+  btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-controls", "sideMenu");
+  btn.innerHTML = "<span></span><span></span><span></span>";
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "menu-backdrop";
+
+  const menu = document.createElement("aside");
+  menu.id = "sideMenu";
+  menu.className = "side-menu";
+  menu.setAttribute("aria-label", "Menu");
+
+  const head = document.createElement("div");
+  head.className = "sm-head";
+  if (logo) {
+    const img = document.createElement("img");
+    img.src = logo.getAttribute("src");
+    img.alt = "";
+    img.onerror = function () { img.style.display = "none"; };
+    head.appendChild(img);
+  }
+  const name = document.createElement("b");
+  name.textContent = "NDA Wallah";
+  head.appendChild(name);
+  const close = document.createElement("button");
+  close.type = "button";
+  close.className = "sm-close";
+  close.setAttribute("aria-label", "Close menu");
+  close.textContent = "✕";
+  head.appendChild(close);
+  menu.appendChild(head);
+
+  items.forEach(function (it) {
+    const a = document.createElement("a");
+    a.href = it[2];
+    if (it[2] === page) a.setAttribute("aria-current", "page");
+    const ic = document.createElement("span");
+    ic.setAttribute("aria-hidden", "true");
+    ic.textContent = it[0];
+    a.appendChild(ic);
+    a.appendChild(document.createTextNode(it[1]));
+    menu.appendChild(a);
+  });
+
+  function setOpen(open) {
+    document.body.classList.toggle("menu-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    (open ? close : btn).focus();
+  }
+  btn.addEventListener("click", function () { setOpen(true); });
+  close.addEventListener("click", function () { setOpen(false); });
+  backdrop.addEventListener("click", function () { setOpen(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && document.body.classList.contains("menu-open")) setOpen(false);
+  });
+
+  header.appendChild(btn);
+  document.body.appendChild(backdrop);
+  document.body.appendChild(menu);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+
+  buildMenu();
 
   // Page loading effect
   document.body.classList.add("loaded");
