@@ -26,32 +26,30 @@
 </style>
 </head>
 <body>
-
 <header class="topbar">
-  <div class="brand">
-    <img src="logo.png" alt="NDA Wallah logo" onerror="this.style.display='none'">
-    <div><h1>Admin Panel</h1><p>NDA Wallah</p></div>
-  </div>
-  <div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="brand">
+<img src="logo.png" alt="NDA Wallah logo" onerror="this.style.display='none'">
+<div><h1>Admin Panel</h1><p>NDA Wallah</p></div>
+</div>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
 </header>
-
 <main>
-  <a class="back" href="index.html">← Public Home</a>
+<a class="back" href="index.html">← Public Home</a>
 
-  <section id="login" class="admin-section">
-    <h2>Admin login</h2>
-    <form id="loginForm" class="form">
-      <input id="email" type="email" required placeholder="Email" autocomplete="username">
-      <input id="password" type="password" required placeholder="Password" autocomplete="current-password">
-      <button type="submit">Login</button>
-    </form>
-    <p id="loginMsg" class="msg"></p>
-  </section>
+<section id="login" class="admin-section">
+<h2>Admin login</h2>
+<form id="loginForm" class="form">
+<input id="email" type="email" required placeholder="Email" autocomplete="username">
+<input id="password" type="password" required placeholder="Password" autocomplete="current-password">
+<button type="submit">Login</button>
+</form>
+<p id="loginMsg" class="msg"></p>
+</section>
 
-  <div id="panel" hidden>
-    <div class="bar"><span id="who"></span><button id="logout" type="button">Logout</button></div>
-    <div id="sections"></div>
-  </div>
+<div id="panel" hidden>
+<div class="bar"><span id="who"></span><button id="logout" type="button">Logout</button></div>
+<div id="sections"></div>
+</div>
 </main>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -147,13 +145,11 @@
         var t = document.createElement("span");
         t.textContent = d.title || "(no name)";
         var box = document.createElement("div");
-
         var e = document.createElement("button");
         e.type = "button";
         e.className = "edit";
         e.textContent = "Edit";
         e.onclick = function () { startEdit(s, doc.id); };
-
         var b = document.createElement("button");
         b.type = "button";
         b.textContent = "Delete";
@@ -165,7 +161,6 @@
           } catch (err) { alert(explain(err)); }
           refresh(s);
         };
-
         box.appendChild(e);
         box.appendChild(b);
         li.appendChild(t);
@@ -266,5 +261,7 @@
   });
 })();
 </script>
+<!-- Side menu (3-line button) for continuity with the public pages -->
+<script src="script.js"></script>
 </body>
 </html>
