@@ -118,3 +118,60 @@ nav a[aria-current="page"]{background:rgba(255,255,255,.22);color:#fff;font-weig
 <script src="script.js"></script>
 </body>
 </html>
+/* NDA Khadakwasla premium background */
+body{
+  position:relative;
+  background:#0e1b33;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(
+      rgba(7,18,38,.82),
+      rgba(7,18,38,.88)
+    ),
+    url("nda-background.png") center center / cover no-repeat;
+  filter:blur(1px);
+  transform:scale(1.02);
+  z-index:-2;
+  pointer-events:none;
+}
+
+/* Soft dark overlay */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(7,18,38,.18);
+  z-index:-1;
+  pointer-events:none;
+}
+
+/* Keep main content readable */
+main{
+  background:transparent;
+}
+
+/* Premium glass cards */
+.row{
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.18);
+  border-left:8px solid var(--c);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(12px) saturate(1.2);
+  backdrop-filter:blur(12px) saturate(1.2);
+  color:#fff;
+}
+
+.row small{
+  color:rgba(255,255,255,.72);
+}
+
+h2{
+  color:#fff;
+}
