@@ -1,0 +1,17 @@
+{
+  "name": "NDA Wallah",
+  "short_name": "NDA Wallah",
+  "description": "NDA preparation, batches and study material",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0e1b33",
+  "theme_color": "#0e1b33",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
