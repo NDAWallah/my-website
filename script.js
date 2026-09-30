@@ -94,16 +94,45 @@ function loadList(col, listId, emptyId, fallback) {
 }
 
 
+const MENU_CSS = `
+.top,.topbar{position:relative}
+.menu-btn{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:46px;height:46px;border:0;border-radius:10px;background:rgba(255,255,255,.14);cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}
+.menu-btn span{display:block;width:22px;height:2px;border-radius:2px;background:#fff}
+.menu-backdrop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:40;background:rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.side-menu{position:fixed;top:0;left:0;bottom:0;z-index:50;width:300px;max-width:82vw;overflow-y:auto;background:#0e1b33;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 14px) 12px 24px;transform:translateX(-100%);visibility:hidden;transition:transform .25s,visibility .25s;font-family:"Barlow",system-ui,sans-serif}
+body.menu-open{overflow:hidden}
+body.menu-open .side-menu{transform:none;visibility:visible}
+body.menu-open .menu-backdrop{opacity:1;visibility:visible}
+.sm-head{display:flex;align-items:center;gap:12px;padding:6px 6px 16px;margin-bottom:10px;border-bottom:1px solid #2b3a57}
+.sm-head img{width:40px;height:40px;border-radius:10px;object-fit:cover;background:#fff}
+.sm-head b{font-family:"Barlow Condensed",system-ui,sans-serif;font-size:1.5rem;font-weight:700;color:#fff}
+.sm-close{margin-left:auto;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:#fff;font-size:1.3rem;cursor:pointer}
+.side-menu a{display:flex;align-items:center;gap:14px;padding:14px 12px;border-radius:10px;font-size:1.1rem;font-weight:500;color:#dbe3f2;text-decoration:none}
+.side-menu a span{font-size:1.3rem;line-height:1}
+.side-menu a[aria-current="page"]{background:#e3e7ee;color:#0e1b33;font-weight:600}
+@media (prefers-reduced-motion:reduce){.side-menu,.menu-backdrop{transition:none}}
+`;
+
 // 3-line menu button + side drawer. Add or remove menu items in the list below.
 function buildMenu() {
   const header = document.querySelector(".top, .topbar");
   if (!header) return;
+
+  // The menu carries its own styles, so it looks right even if style.css is old or cached.
+  if (!document.getElementById("menuStyles")) {
+    const st = document.createElement("style");
+    st.id = "menuStyles";
+    st.textContent = MENU_CSS;
+    document.head.appendChild(st);
+  }
 
   const items = [
     ["🏠", "Home", "index.html"],
     ["🎖️", "Batches", "batches.html"],
     ["📚", "Books", "books.html"],
     ["💬", "Connect with us", "social.html"]
+    // Naya item jodne ke liye upar wali line ke aakhir mein comma lagao, phir aisi line likho:
+    // ["🛡️", "Defence Notifications", "notifications.html"]
   ];
   const page = location.pathname.split("/").pop() || "index.html";
   const logo = header.querySelector(".brand img");
