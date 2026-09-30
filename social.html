@@ -37,37 +37,34 @@ h2{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:700;font-size
 .list-grid a,.list-grid button{display:inline-block;margin-top:14px;padding:11px 20px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:600 1rem "Barlow",system-ui,sans-serif;cursor:pointer}
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:10}
-nav .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+nav .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
 nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;font-size:.85rem;font-weight:500;color:var(--muted)}
 nav a span{font-size:1.3rem;line-height:1}
 nav a[aria-current="page"]{color:var(--navy);font-weight:600;box-shadow:inset 0 3px 0 var(--navy)}
 </style>
 </head>
 <body>
-
 <header class="topbar">
-  <div class="brand">
-    <img src="logo.png" alt="NDA Wallah logo" onerror="this.style.display='none'">
-    <div><h1>Social</h1><p>NDA Wallah</p></div>
-  </div>
-  <div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="brand">
+<img src="logo.png" alt="NDA Wallah logo" onerror="this.style.display='none'">
+<div><h1>Social</h1><p>NDA Wallah</p></div>
+</div>
+<div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
 </header>
-
 <main>
-  <a class="back" href="index.html">← Home</a>
-  <h2>Connect with us</h2>
-  <div id="socialList" class="list-grid"></div>
-  <p id="socialEmpty" class="empty">No links yet. Our Telegram, WhatsApp and other links will appear here.</p>
+<a class="back" href="index.html">← Home</a>
+<h2>Connect with us</h2>
+<div id="socialList" class="list-grid"></div>
+<p id="socialEmpty" class="empty">No links yet. Our Telegram, WhatsApp and other links will appear here.</p>
 </main>
-
 <nav aria-label="Main">
-  <div class="in">
-    <a href="batches.html"><span aria-hidden="true">🎖️</span>Batches</a>
-    <a href="index.html"><span aria-hidden="true">🏠</span>Home</a>
-    <a href="books.html"><span aria-hidden="true">📚</span>Books</a>
-  </div>
+<div class="in">
+<a href="batches.html"><span aria-hidden="true">🎖️</span>Batches</a>
+<a href="index.html"><span aria-hidden="true">🏠</span>Home</a>
+<a href="books.html"><span aria-hidden="true">📚</span>Books</a>
+<a href="social.html" aria-current="page"><span aria-hidden="true">💬</span>Social</a>
+</div>
 </nav>
-
 <script src="script.js"></script>
 </body>
 </html>
