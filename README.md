@@ -2,7 +2,7 @@
 
 A study platform for NDA aspirants. Explore batches, books and study resources in one place.
 
-**Live site:** https://paruldhaka301008-create.github.io/my-website/
+**Live site:** https://ndawallah.github.io/
 
 ## Pages
 
@@ -12,42 +12,30 @@ A study platform for NDA aspirants. Explore batches, books and study resources i
 | `batches.html` | Study batches |
 | `books.html` | Books and study material |
 | `social.html` | Telegram, WhatsApp and other social links |
-| `admin.html` | Helper that builds ready-to-paste lines for new batches and books |
+| `admin.html` | Admin login to add, edit and delete batches, books and social links |
 
-## Add a batch or a book
+## How content is managed
 
-1. Open `admin.html` on the site and fill in the form.
-2. Copy the line it creates.
-3. Open `script.js` and paste the line inside the `BATCHES` or `BOOKS` list.
-4. Commit the change. The new item shows up on the site after a minute or two.
-
-An entry looks like this:
-
-```js
-{ title: "NDA 2027 Batch", description: "Maths + GAT live classes", link: "https://t.me/yourchannel", linkText: "Join batch" },
-```
-
-`link` and `linkText` are optional.
+Batches, books and social links are stored in Firebase (Firestore) and shown on the site automatically.
+The owner signs in on `admin.html` with an email and password. Only the owner's email is allowed to write data (set in the Firestore rules); everyone else can only read.
 
 ## Project files
 
 ```
-index.html     home
-batches.html   batches
-books.html     books
-social.html    social links
-admin.html     line builder for batches and books
-script.js      batch and book lists, page behaviour
-style.css      shared styles (used by pages that link it)
-logo.png       logo
+index.html         home
+batches.html       batches
+books.html         books
+social.html        social links
+admin.html         admin panel (login, add, edit, delete)
+script.js          loads data, side menu, glass bottom bar
+style.css          shared styles
+firebase-config.js Firebase project details
+logo.png           logo
 ```
 
 ## Hosting
 
-The site is hosted with GitHub Pages from the `main` branch. Any commit to `main` updates the live site.
-
-## Status
-
-The admin page is a helper only. It has no login and cannot change the site by itself. A real admin with sign-in and a database is planned for a later phase.
+Hosted with GitHub Pages from the `main` branch. Any commit to `main` updates the live site.
+If the site address changes, add the new address in Firebase > Authentication > Settings > Authorized domains, or admin login will stop working.
 
 © 2026 NDA Wallah
