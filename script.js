@@ -42,8 +42,8 @@ function renderCards(items, listId, emptyId) {
   const list = document.getElementById(listId);
   const empty = document.getElementById(emptyId);
   if (!list) return;
-
   list.innerHTML = "";
+
   items.forEach(function (item) {
     const card = document.createElement("div");
     const name = item.title || item.name || "";
@@ -93,7 +93,6 @@ function loadList(col, listId, emptyId, fallback) {
   });
 }
 
-
 const MENU_CSS = `
 .top,.topbar{position:relative}
 .menu-btn{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:5;width:46px;height:46px;border:0;border-radius:10px;background:rgba(255,255,255,.14);cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}
@@ -113,11 +112,11 @@ body.menu-open .menu-backdrop{opacity:1;visibility:visible}
 @media (prefers-reduced-motion:reduce){.side-menu,.menu-backdrop{transition:none}}
 `;
 
-// Glass-style floating bottom bar. Carries its own styles, so it works on every page.
+// Glass-style floating bottom bar (4 tabs). Carries its own styles, so it works on every page.
 const NAV_CSS = `
 body{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 nav{left:50%;right:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 28px);max-width:420px;transform:translateX(-50%);padding:0;border:1px solid rgba(255,255,255,.3);border-radius:30px;background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.04) 60%),rgba(14,27,51,.7);-webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);box-shadow:0 10px 30px rgba(14,27,51,.35),inset 0 1px 0 rgba(255,255,255,.4)}
-nav .in{gap:4px;padding:6px}
+nav .in{gap:4px;padding:6px;grid-template-columns:repeat(4,1fr)}
 nav a{padding:8px 4px;border-radius:24px;color:rgba(255,255,255,.88);font-weight:500}
 nav a[aria-current="page"]{background:rgba(255,255,255,.22);color:#fff;font-weight:600;box-shadow:inset 0 0 0 1px rgba(255,255,255,.32),inset 0 1px 0 rgba(255,255,255,.4)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){nav{background:rgba(14,27,51,.94)}}
@@ -152,7 +151,11 @@ function buildMenu() {
     // Naya item jodne ke liye upar wali line ke aakhir mein comma lagao, phir aisi line likho:
     // ["🛡️", "Defence Notifications", "notifications.html"]
   ];
-  const page = location.pathname.split("/").pop() || "index.html";
+
+  // Works with both /batches.html and /batches (GitHub Pages clean URLs).
+  const strip = function (p) { return p.replace(/\.html$/, ""); };
+  const page = strip(location.pathname.split("/").pop() || "index");
+
   const logo = header.querySelector(".brand img");
 
   const btn = document.createElement("button");
@@ -194,7 +197,7 @@ function buildMenu() {
   items.forEach(function (it) {
     const a = document.createElement("a");
     a.href = it[2];
-    if (it[2] === page) a.setAttribute("aria-current", "page");
+    if (strip(it[2]) === page) a.setAttribute("aria-current", "page");
     const ic = document.createElement("span");
     ic.setAttribute("aria-hidden", "true");
     ic.textContent = it[0];
@@ -221,7 +224,6 @@ function buildMenu() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-
   glassNav();
   buildMenu();
 
