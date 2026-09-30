@@ -2,8 +2,7 @@
 
 A study platform for NDA aspirants. Explore batches, books and study resources in one place.
 
-**Live site:** https://ndawallah.github.io/
-
+**Live site:** https://ndawallah.github.io/my-website/
 ## Pages
 
 | Page | What it shows |
