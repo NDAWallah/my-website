@@ -113,6 +113,24 @@ body.menu-open .menu-backdrop{opacity:1;visibility:visible}
 @media (prefers-reduced-motion:reduce){.side-menu,.menu-backdrop{transition:none}}
 `;
 
+// Glass-style floating bottom bar. Carries its own styles, so it works on every page.
+const NAV_CSS = `
+body{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+nav{left:50%;right:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:calc(100% - 28px);max-width:420px;transform:translateX(-50%);padding:0;border:1px solid rgba(255,255,255,.3);border-radius:30px;background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.04) 60%),rgba(14,27,51,.7);-webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);box-shadow:0 10px 30px rgba(14,27,51,.35),inset 0 1px 0 rgba(255,255,255,.4)}
+nav .in{gap:4px;padding:6px}
+nav a{padding:8px 4px;border-radius:24px;color:rgba(255,255,255,.88);font-weight:500}
+nav a[aria-current="page"]{background:rgba(255,255,255,.22);color:#fff;font-weight:600;box-shadow:inset 0 0 0 1px rgba(255,255,255,.32),inset 0 1px 0 rgba(255,255,255,.4)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){nav{background:rgba(14,27,51,.94)}}
+`;
+
+function glassNav() {
+  if (!document.querySelector("nav") || document.getElementById("navGlassStyles")) return;
+  const st = document.createElement("style");
+  st.id = "navGlassStyles";
+  st.textContent = NAV_CSS;
+  document.head.appendChild(st);
+}
+
 // 3-line menu button + side drawer. Add or remove menu items in the list below.
 function buildMenu() {
   const header = document.querySelector(".top, .topbar");
@@ -204,6 +222,7 @@ function buildMenu() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  glassNav();
   buildMenu();
 
   // Page loading effect
