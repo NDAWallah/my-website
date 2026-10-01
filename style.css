@@ -261,3 +261,20 @@ body.menu-open .menu-backdrop{opacity:1;visibility:visible}
   nav{background:rgba(255,255,255,.92)}
   .side-menu{background:rgba(14,27,51,.96)}
 }
+/* ---------- Bigger screens: tablet / laptop / desktop ---------- */
+@media (min-width:768px){
+  .wrap,main:not(.wrap),.topbar .brand{max-width:960px}
+  .list,.list-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .menu-btn{right:24px}
+}
+@media (min-width:1200px){
+  .wrap,main:not(.wrap),.topbar .brand{max-width:1100px}
+  .hero h1{font-size:4.2rem}
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width:360px){
+  .wrap,main:not(.wrap){padding-left:14px;padding-right:14px}
+  .btn{padding:12px 20px}
+  nav a{font-size:.78rem}
+}
